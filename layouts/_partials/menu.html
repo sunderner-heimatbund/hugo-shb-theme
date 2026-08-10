@@ -23,8 +23,8 @@ Renders a menu for the given menu ID.
 {{- range $index, $entry := $menuEntries }}
 {{- $isLast := eq $index $lastIndex }}
 {{- $baseClasses := cond $isLast
-    "block py-3 pr-4 pl-3 hover:font-semibold lg:border-0 lg:p-0"
-    "block py-3 pr-4 pl-3 border-b border-border hover:font-semibold lg:border-0 lg:p-0"
+    "block py-3 pr-4 pl-3 hover:underline hover:underline-offset-4 lg:border-0 lg:p-0"
+    "block py-3 pr-4 pl-3 border-b border-border hover:underline hover:underline-offset-4 lg:border-0 lg:p-0"
 }}
 {{- $attrs := dict "href" $entry.URL }}
 {{- if $page.IsMenuCurrent $entry.Menu $entry }}
