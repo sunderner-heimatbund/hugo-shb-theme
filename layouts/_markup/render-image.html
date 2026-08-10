@@ -1,0 +1,30 @@
+<!-- Determine the capion: if set, markdown image title, otherwise alt
+description, otherwise empty; -->
+{{- $alt := .Text | default "" -}}
+{{- $title := .Title | default "" -}}
+{{- $caption := $title -}}
+{{- if not $caption -}}
+  {{- $caption = $alt -}}
+{{- end -}}
+
+{{- $dest := .Destination -}}
+{{- $parsed := urls.Parse .Destination -}}
+{{- if and (not $parsed.IsAbs) (not (hasPrefix .Destination "/")) -}}
+  {{- $path := strings.TrimPrefix "./" $parsed.Path -}}
+  {{- with .Page.Resources.GetMatch $path -}}
+    {{- $dest = .RelPermalink -}}
+  {{- end -}}
+{{- end -}}
+
+<figure class="not-prose my-10 flex w-full flex-col items-center">
+  <img
+    src="{{ $dest | safeURL }}"
+    alt="{{ $alt }}"
+    {{- with $title }} title="{{ . }}"{{ end }}
+    loading="lazy"
+    class="max-h-full max-w-full rounded-xl shadow-lg ring-1 ring-black/5"
+    style="max-width: min(100%, 768px); height: auto; width: auto; object-fit: contain;" />
+  {{- with $caption }}
+    <figcaption class="mt-3 text-center text-sm text-muted-foreground">{{ . }}</figcaption>
+  {{- end }}
+</figure>

@@ -1,0 +1,22 @@
+{
+  "name": "hugo-shb-theme",
+  "version": "0.1.0",
+  "description": "Hugo theme for www.sunderner-heimatbund.de.",
+  "main": "tailwind.config.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Sunderner-Heimatbund/hugo-shb-theme.git"
+  },
+  "author": "Sunderner Heimatbund e.V.",
+  "license": "MIT",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Sunderner-Heimatbund/hugo-shb-theme/issues"
+  },
+  "homepage": "https://github.com/Sunderner-Heimatbund/hugo-shb-theme#readme",
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.1.12",
+    "@tailwindcss/typography": "^0.5.19",
+    "tailwindcss": "^4.1.12"
+  }
+}

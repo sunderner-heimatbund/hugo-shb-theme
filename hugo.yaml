@@ -1,0 +1,55 @@
+baseURL: https://example.org/
+languageCode: de-DE
+title: Sunderner Heimatbund
+
+menus:
+  main:
+    - name: Start
+      pageRef: /
+      weight: 10
+    - name: Beiträge
+      pageRef: /posts
+      weight: 20
+    - name: Über
+      pageRef: /about
+      weight: 30
+    - name: Kontakt
+      pageRef: /contact
+      weight: 60
+
+module:
+  hugoVersion:
+    extended: false
+    min: 0.146.0
+  mounts:
+    - source: layouts
+      target: layouts
+    - source: assets
+      target: assets
+    - source: static
+      target: static
+    - disableWatch: true
+      source: hugo_stats.json
+      target: assets/notwatching/hugo_stats.json
+
+# --- enable Tailwind CSS ---
+build:
+  buildStats:
+    enable: true
+    cachebusters:
+      - source: assets/notwatching/hugo_stats\.json
+        target: css
+      - source: (postcss|tailwind)\.config\.js
+        target: css
+
+params:
+  footer:
+    - name: Datenschutz
+      pageRef: /privacy
+    - name: Impressum
+      pageRef: /legal
+
+markup:
+  goldmark:
+    parser:
+      wrapStandAloneImageWithinParagraph: false

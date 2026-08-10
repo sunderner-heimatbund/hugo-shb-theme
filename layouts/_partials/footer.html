@@ -1,1 +1,19 @@
-<p>Copyright {{ now.Year }}. All rights reserved.</p>
+<footer class="bg-(--color-card) inset-shadow-sm">
+    <div class="w-full max-w-screen-xl mx-auto py-6 lg:py-8">
+        <div class="flex flex-col items-center gap-4 sm:flex-row sm:justify-between sm:gap-0">
+            <span class="hidden sm:block sm:grow"></span>
+            <ul
+                class="flex flex-wrap items-center justify-center text-sm font-light text-gray-500 sm:justify-normal dark:text-gray-400 list-none">
+                {{ range .Site.Params.footer }}
+                <li>
+                    <a href="{{ .pageRef }}" class="hover:underline me-4 md:me-6">{{ .name }}</a>
+                </li>
+                {{ end }}
+            </ul>
+        </div>
+        <hr class="my-6 border-border sm:mx-auto lg:my-8" />
+        <span class="block text-xs text-gray-500 text-center sm:text-sm dark:text-gray-400">
+            {{ .Site.Params.author.copyright }}
+        </span>
+    </div>
+</footer>

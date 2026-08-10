@@ -11,41 +11,52 @@ Renders a menu for the given menu ID.
 {{- $menuID := .menuID }}
 
 {{- with index site.Menus $menuID }}
-  <nav>
-    <ul>
-      {{- partial "inline/menu/walk.html" (dict "page" $page "menuEntries" .) }}
-    </ul>
-  </nav>
+<ul class="flex flex-col mt-4 font-medium lg:flex-row lg:space-x-8 lg:mt-0">
+  {{- partial "inline/menu/walk.html" (dict "page" $page "menuEntries" .) }}
+</ul>
 {{- end }}
 
 {{- define "_partials/inline/menu/walk.html" }}
-  {{- $page := .page }}
-  {{- range .menuEntries }}
-    {{- $attrs := dict "href" .URL }}
-    {{- if $page.IsMenuCurrent .Menu . }}
-      {{- $attrs = merge $attrs (dict "class" "active" "aria-current" "page") }}
-    {{- else if $page.HasMenuCurrent .Menu .}}
-      {{- $attrs = merge $attrs (dict "class" "ancestor" "aria-current" "true") }}
-    {{- end }}
-    {{- $name := .Name }}
-    {{- with .Identifier }}
-      {{- with T . }}
-        {{- $name = . }}
-      {{- end }}
-    {{- end }}
-    <li>
-      <a
-        {{- range $k, $v := $attrs }}
-          {{- with $v }}
-            {{- printf " %s=%q" $k $v | safeHTMLAttr }}
-          {{- end }}
-        {{- end -}}
-      >{{ $name }}</a>
-      {{- with .Children }}
-        <ul>
-          {{- partial "inline/menu/walk.html" (dict "page" $page "menuEntries" .) }}
-        </ul>
-      {{- end }}
-    </li>
+{{- $page := .page }}
+{{- $menuEntries := .menuEntries }}
+{{- $lastIndex := sub (len $menuEntries) 1 }}
+{{- range $index, $entry := $menuEntries }}
+{{- $isLast := eq $index $lastIndex }}
+{{- $baseClasses := cond $isLast
+    "block py-3 pr-4 pl-3 hover:font-semibold lg:border-0 lg:p-0"
+    "block py-3 pr-4 pl-3 border-b border-border hover:font-semibold lg:border-0 lg:p-0"
+}}
+{{- $attrs := dict "href" $entry.URL }}
+{{- if $page.IsMenuCurrent $entry.Menu $entry }}
+{{- $attrs = merge $attrs (dict
+    "class" (printf "%s underline underline-offset-4 font-semibold" $baseClasses)
+    "aria-current" "page"
+  )
+}}
+{{- else if $page.HasMenuCurrent $entry.Menu $entry }}
+{{- $attrs = merge $attrs (dict
+    "class" (printf "%s underline underline-offset-4" $baseClasses)
+    "aria-current" "true"
+  )
+}}
+{{- else }}
+{{- $attrs = merge $attrs (dict "class" $baseClasses) }}
+{{- end }}
+{{- $name := $entry.Name }}
+{{- with $entry.Identifier }}
+{{- with T . }}
+{{- $name = . }}
+{{- end }}
+{{- end }}
+<li>
+  <a {{- range $k, $v := $attrs }} {{- with $v }} {{- printf " %s=%q" $k $v | safeHTMLAttr }} {{- end }} {{- end -}}>
+    {{ $name }}
+  </a>
+  {{- with $entry.Children }}
+  <ul>
+    {{- partial "inline/menu/walk.html" (dict "page" $page "menuEntries" .) }}
+  </ul>
   {{- end }}
+</li>
+{{- end }}
 {{- end }}

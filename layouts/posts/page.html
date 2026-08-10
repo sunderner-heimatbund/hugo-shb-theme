@@ -1,0 +1,32 @@
+{{ define "main" }}
+<article class="prose mx-auto py-16">
+    {{ $authorName := "Anonymous" }}
+    {{ with .Params.author }}
+        {{ $authorMatches := where site.Data.authors "name" . }}
+        {{ if gt (len $authorMatches) 0 }}
+            {{ $author := index $authorMatches 0 }}
+            {{ $authorName = $author.name }}
+        {{ end }}
+    {{ end }}
+
+    <p class="text-sm text-muted-foreground">
+        <time datetime='{{ .Date | time.Format "2006-01-02" }}'>{{ .Date | time.Format ":date_long" }}</time>
+        • {{ $authorName }}
+    </p>
+
+    <h1 class="mt-3 text-4xl font-semibold">{{ .Title }}</h1>
+
+    {{ with .GetTerms "tags" }}
+    <div class="mt-4 flex flex-wrap items-center gap-2 not-prose">
+        {{ range . }}
+        <a href="{{ .RelPermalink }}" class="relative rounded-full px-3 py-1.5 text-sm font-light bg-(--color-muted)">
+            {{ .LinkTitle }}
+        </a>
+        {{ end }}
+    </div>
+    {{ end }}
+
+    <div class="mt-8">{{ .Content }}</div>
+
+</article>
+{{ end }}

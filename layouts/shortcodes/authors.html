@@ -1,0 +1,32 @@
+<!--
+// NOTE: This renders members that are selected in the front matter of
+// content/about.md on the /about page. It preserves the order of the list
+// in that front matter. Default image is assets/images/authors/author.png,
+// unless the `image` field is set for a user.
+-->
+{{ with .Site.Data.authors }}
+  {{ with $.Page.Params.authors }}
+    {{ $selected := . }}
+   <div class="flex flex-wrap justify-evenly content-around gap-5 my-6">
+      {{ range $name := $selected }}
+        {{ range where $.Site.Data.authors "name" $name }}
+          {{ $imagePath := "images/authors/author.png" }}
+          {{ with .image }}
+            {{ $imagePath = . }}
+          {{ end }}
+          {{ $imageURL := printf "/%s" (replaceRE "^/" "" $imagePath) }}
+          {{ with resources.Get $imagePath }}
+            {{ $imageURL = .RelPermalink }}
+          {{ end }}
+          <div class="p-5">
+            <div class="flex flex-col items-center">
+              <img src="{{ $imageURL }}" alt="{{ .name }}" class="w-30 h-30 rounded-full overflow-hidden object-cover bg-gray-800" />
+              <span class="font-semibold text-xl mt-5">{{ .name }}</span>
+              <span class="font-light">{{ .role }}</span>
+            </div>
+         </div>
+       {{ end }}
+     {{ end }}
+    </div>
+  {{ end }}
+{{ end }}

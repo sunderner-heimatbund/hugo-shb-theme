@@ -1,0 +1,5 @@
+{{- $href := .Get "href" -}}
+{{- $text := .Get "text" | default (.Inner) -}}
+<a href="{{ $href | relURL }}" class="inline-block px-6 py-3 mt-4 text-primary-foreground bg-primary rounded-lg hover:opacity-90 transition-opacity duration-200 font-medium">
+    {{- $text -}}
+</a>

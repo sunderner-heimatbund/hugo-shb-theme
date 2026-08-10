@@ -1,0 +1,63 @@
+{{/*
+"." is the full unmarshalled JSON from https://github.com/sunderner-heimatbund/heimatblaetter,
+so ".volumes" gives us the slice of all volumes + download urls etc.
+*/}}
+
+{{/* Desktop / tablet: real table, hidden on small screens */}}
+<div class="hidden md:block overflow-hidden rounded-lg border border-border bg-card shadow-xs">
+  <table class="w-full text-sm text-left">
+    <thead class="bg-muted text-xs uppercase tracking-wide text-muted-foreground">
+      <tr>
+        <th class="px-4 py-3 font-medium">Ausgabe</th>
+        <th class="px-4 py-3 font-medium">Titel</th>
+        <th class="px-4 py-3 font-medium text-right">
+          <span class="sr-only">Download</span>
+        </th>
+      </tr>
+    </thead>
+    <tbody class="divide-y divide-border">
+      {{ range .volumes }}
+        <tr class="hover:bg-muted/60 transition-colors">
+          <td class="px-4 py-3 whitespace-nowrap font-medium text-foreground">
+            Nr. {{ .volume }} <span class="font-normal text-muted-foreground">· {{ .year }}</span>
+          </td>
+          <td class="px-4 py-3 text-foreground">{{ .name }}</td>
+          <td class="px-4 py-3 text-right">
+            <a href="{{ .url }}" target="_blank" rel="noopener"
+               title="Herunterladen"
+               aria-label="{{ .name }} herunterladen"
+               class="inline-flex h-9 w-9 items-center justify-center rounded-full bg-primary text-primary-foreground transition-opacity hover:opacity-90">
+              <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 3v12m-4-4 4 4 4-4M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" />
+              </svg>
+              <span class="sr-only">Herunterladen</span>
+            </a>
+          </td>
+        </tr>
+      {{ end }}
+    </tbody>
+  </table>
+</div>
+
+{{/* Mobile: stacked cards, no horizontal scrolling required */}}
+<div class="grid gap-3 md:hidden">
+  {{ range .volumes }}
+    <div class="flex items-start justify-between gap-3 rounded-lg border border-border bg-card p-4 shadow-xs">
+      <div class="min-w-0">
+        <p class="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+          Nr. {{ .volume }} · {{ .year }}
+        </p>
+        <p class="mt-1 font-medium text-foreground">{{ .name }}</p>
+      </div>
+      <a href="{{ .url }}" target="_blank" rel="noopener"
+         title="Herunterladen"
+         aria-label="{{ .name }} herunterladen"
+         class="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground transition-opacity hover:opacity-90">
+        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 3v12m-4-4 4 4 4-4M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" />
+        </svg>
+        <span class="sr-only">Herunterladen</span>
+      </a>
+    </div>
+  {{ end }}
+</div>

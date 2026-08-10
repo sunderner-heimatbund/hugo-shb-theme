@@ -1,17 +1,30 @@
 <!DOCTYPE html>
 <html lang="{{ site.Language.LanguageCode }}" dir="{{ or site.Language.LanguageDirection `ltr` }}">
+
 <head>
   {{ partial "head.html" . }}
+  {{/* Add Tailwind CSS processing partial */}}
+  {{ with (templates.Defer (dict "key" "global")) }}
+  {{ partial "css.html" . }}
+  {{ end }}
 </head>
-<body>
-  <header>
-    {{ partial "header.html" . }}
-  </header>
-  <main>
-    {{ block "main" . }}{{ end }}
+
+<body class="min-h-screen flex flex-col">
+
+  {{ if not hugo.IsProduction }}
+  <!-- kind={{ .Kind }} type={{ .Type }} section={{ .Section }} layout={{ .Layout }} -->
+  {{ end }}
+
+  {{ partial "header.html" . }}
+
+  <main class="m-10 bg-(--color-background) grow">
+    <div class="mx-auto max-w-screen-xl">
+      {{ block "main" . }}{{ end }}
+    </div>
   </main>
-  <footer>
-    {{ partial "footer.html" . }}
-  </footer>
+
+  {{ partial "footer.html" . }}
+
 </body>
+
 </html>

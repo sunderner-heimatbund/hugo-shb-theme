@@ -1,0 +1,21 @@
+{{- $dest := .Destination -}}
+{{- $parsed := urls.Parse .Destination -}}
+{{- if and (not $parsed.IsAbs) (not (hasPrefix .Destination "/")) -}}
+  {{- $path := strings.TrimPrefix "./" $parsed.Path -}}
+  {{- with .Page.Resources.GetMatch $path -}}
+    {{- $dest = .RelPermalink -}}
+  {{- end -}}
+{{- end -}}
+{{- $isPDF := hasSuffix (lower $parsed.Path) ".pdf" -}}
+
+{{- if $isPDF -}}
+  {{- $icon := resources.Get "icons/pdf.png" -}}
+  <a href="{{ $dest | safeURL }}" target="_blank" rel="noopener noreferrer" class="not-prose inline-flex items-center gap-2 rounded-md border border-(--color-border) px-3 py-2 hover:bg-(--color-card)">
+    {{- with $icon }}
+      <img src="{{ .RelPermalink }}" alt="PDF" class="h-5 w-5" loading="lazy" />
+    {{- end }}
+    <span>{{ .Text | default "PDF öffnen" }}</span>
+  </a>
+{{- else -}}
+  <a href="{{ $dest | safeURL }}"{{ with .Title }} title="{{ . }}"{{ end }}>{{ .Text }}</a>
+{{- end -}}

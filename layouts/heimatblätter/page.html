@@ -1,0 +1,29 @@
+{{ define "main" }}
+
+<article class="prose mx-auto py-16">
+    <h1>{{ .Title }}</h1>
+
+    <div class="mt-8">{{ .Content }}</div>
+</article>
+
+<div class="not-prose mx-auto max-w-4xl pb-16">
+  {{ $url := "https://raw.githubusercontent.com/sunderner-heimatbund/heimatblaetter/refs/heads/main/index.json" }}
+  {{ with try (resources.GetRemote $url) }}
+    {{ with .Err }}
+      {{ warnf "%s" . }}
+      <p class="text-center text-sm text-muted-foreground">
+        Die Ausgaben können derzeit nicht geladen werden. Bitte versuchen Sie es später erneut.
+      </p>
+    {{ else with .Value }}
+      {{ $data := . | transform.Unmarshal}}
+      {{ partial "heimatblätter.html" $data }}
+    {{ else }}
+      {{ warnf "Unable to get remote resource %q" $url }}
+      <p class="text-center text-sm text-muted-foreground">
+        Die Ausgaben können derzeit nicht geladen werden. Bitte versuchen Sie es später erneut.
+      </p>
+    {{ end }}
+  {{ end }}
+</div>
+
+{{ end }}

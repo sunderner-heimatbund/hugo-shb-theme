@@ -1,2 +1,30 @@
-<h1>{{ site.Title }}</h1>
-{{ partial "menu.html" (dict "menuID" "main" "page" .) }}
+<header class="relative bg-(--color-card) shadow-xs h-[150px]">
+    <div class="h-full w-full max-w-screen-xl mx-auto pr-5 flex items-center justify-between">
+        <span class="h-3/4 [&>svg]:h-full [&>svg]:w-auto [&>svg]:max-w-none">
+            {{ with resources.Get site.Params.logo }}
+            {{ .Content | safeHTML }}
+            {{ end }}
+        </span>
+
+        <div class="flex items-center lg:contents">
+            <button
+                type="button"
+                class="inline-flex items-center justify-center w-10 h-10 p-2 text-sm text-gray-500 rounded-lg hover:bg-accent focus:outline-none focus:ring-2 focus:ring-ring lg:hidden dark:text-gray-400"
+                data-collapse-toggle="main-nav"
+                aria-controls="main-nav"
+                aria-expanded="false">
+                <span class="sr-only">Hauptmenü öffnen</span>
+                <svg data-icon="open" class="w-6 h-6" fill="none" viewBox="0 0 17 14" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h15M1 7h15M1 13h15" />
+                </svg>
+                <svg data-icon="close" class="hidden w-6 h-6" fill="none" viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1l6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                </svg>
+            </button>
+
+            <nav id="main-nav" class="hidden absolute inset-x-0 top-full z-40 w-full bg-(--color-card) shadow-md px-5 py-4 lg:static lg:top-auto lg:z-auto lg:block lg:w-auto lg:shadow-none lg:p-0">
+                {{ partial "menu.html" (dict "menuID" "main" "page" .) }}
+            </nav>
+        </div>
+    </div>
+</header>

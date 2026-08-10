@@ -1,8 +1,109 @@
 {{ define "main" }}
-  <h1>{{ .Title }}</h1>
-  {{ .Content }}
-  {{ range .Pages }}
-    <h2><a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a></h2>
-    {{ .Summary }}
-  {{ end }}
+<div class="py-24 sm:pt-32">
+  <div class="mx-auto max-w-7xl px-6 lg:px-8">
+
+    {{/* header */}}
+    <div class="mx-auto max-w-2xl lg:mx-0">
+      <h2 class="text-4xl font-semibold tracking-tight text-pretty sm:text-5xl">{{ .Title }}</h2>
+      <p class="mt-2 text-lg/8 text-muted-foreground">{{ .Content | plainify }}</p>
+    </div>
+
+    <hr class="mt-10" />
+
+    <div
+      class="mx-auto mt-10 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 pt-10 sm:mt-16 sm:pt-16 lg:mx-0 lg:max-w-none lg:grid-cols-3">
+
+      {{ $pages := where site.RegularPages "Type" "posts" }}
+      {{ $paginator := .Paginate $pages.ByPublishDate.Reverse 6 }}
+      {{ range $paginator.Pages }}
+      {{ $authorName := "Anonymous" }}
+      {{ $authorRole := "Anonymous" }}
+      {{ $authorImagePath := "images/authors/author.png" }}
+      {{ with .Params.author }}
+        {{ $authorMatches := where site.Data.authors "name" . }}
+        {{ if gt (len $authorMatches) 0 }}
+          {{ $author := index $authorMatches 0 }}
+          {{ $authorName = $author.name }}
+          {{ with $author.role }}
+            {{ $authorRole = . }}
+          {{ end }}
+          {{ with $author.image }}
+            {{ $authorImagePath = . }}
+          {{ end }}
+        {{ end }}
+      {{ end }}
+      {{ $authorImageURL := printf "/%s" (replaceRE "^/" "" $authorImagePath) }}
+      {{ with resources.Get $authorImagePath }}
+        {{ $authorImageURL = .RelPermalink }}
+      {{ end }}
+
+      {{/* single article card */}}
+      <article
+        class="flex max-w-xl flex-col items-start justify-between bg-(--color-card) hover:bg-(--color-card-hover) rounded-3xl p-6 cursor-pointer">
+
+          <div class="flex items-center gap-x-4 text-xs">
+            <time datetime='{{ .PublishDate | time.Format "2006-01-02" }}' class="text-muted-foreground">
+              <span class="text-muted-foreground">
+                {{ .PublishDate | time.Format ":date_medium" }}
+              </span>
+            </time>
+            {{ range .Params.tags }}
+            <a href="/tags/{{ . }}" class="relative rounded-full px-3 py-1.5 font-light bg-(--color-muted)">
+              {{ . }}
+            </a>
+            {{ end }}
+          </div>
+
+          <div class="group relative grow">
+            <h3 class="mt-3 text-lg/6 font-semibold">
+              <a href="{{ .RelPermalink }}" class="hover:underline">
+                {{ .LinkTitle }}
+              </a>
+            </h3>
+            <p class="mt-5 text-muted-foreground line-clamp-3 text-sm/6 ">
+              {{ .Summary | plainify | truncate 250 }}
+            </p>
+          </div>
+
+          <div class="relative mt-8 flex items-center gap-x-4 justify-self-end">
+            <img src="{{ $authorImageURL }}" alt="{{ $authorName }}"
+              class="size-10 rounded-full bg-gray-800" />
+            <div class="text-sm/6">
+              <p class="font-semibold">
+                {{ $authorName }}
+              </p>
+              <p class="text-muted-foreground font-light">{{ $authorRole }}</p>
+            </div>
+          </div>
+
+      </article>
+
+      {{ end }}
+
+    </div>
+
+
+    <style>
+      ul.pagination {
+        margin-top: 200px;
+        display: flex;
+        justify-content: center;
+        list-style: none;
+        padding: 0;
+        color: var(--color-muted-foreground);
+      }
+
+      ul.pagination li.page-item {
+        margin: 0 5px;
+      }
+
+      ul.pagination li.page-item[class*="active"] a {
+        color: var(--color-foreground);
+        text-decoration: underline;
+      }
+    </style>
+    {{ partial "pagination.html" (dict "page" . "format" "terse") }}
+
+  </div>
+</div>
 {{ end }}

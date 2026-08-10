@@ -1,7 +1,5 @@
 {{ define "main" }}
+<div class="prose prose-lg max-w-none">
   {{ .Content }}
-  {{ range site.RegularPages }}
-    <h2><a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a></h2>
-    {{ .Summary }}
-  {{ end }}
+</div>
 {{ end }}
