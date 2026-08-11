@@ -10,7 +10,7 @@
     {{ end }}
 
     <p class="text-sm text-muted-foreground">
-        <time datetime='{{ .Date | time.Format "2006-01-02" }}'>{{ .Date | time.Format ":date_long" }}</time>
+        <time datetime='{{ .Date | time.Format "2006-01-02" }}'>{{ .Date | time.Format "2. Jan 2006" }}</time>
         • {{ $authorName }}
     </p>
 

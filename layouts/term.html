@@ -17,7 +17,7 @@
            class="group flex flex-col gap-1 py-5 transition-colors sm:flex-row sm:items-baseline sm:gap-x-6">
           <time datetime='{{ .PublishDate | time.Format "2006-01-02" }}'
                 class="shrink-0 text-sm tabular-nums text-muted-foreground sm:w-32">
-            {{ .PublishDate | time.Format ":date_medium" }}
+            {{ .PublishDate | time.Format "2. Jan 2006" }}
           </time>
           <h3 class="text-base sm:text-lg/6 font-semibold text-foreground group-hover:underline">
             {{ .LinkTitle }}

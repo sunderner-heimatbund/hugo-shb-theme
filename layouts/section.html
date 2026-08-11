@@ -44,7 +44,7 @@
           <div class="flex items-center gap-x-4 text-xs">
             <time datetime='{{ .PublishDate | time.Format "2006-01-02" }}' class="text-muted-foreground">
               <span class="text-muted-foreground">
-                {{ .PublishDate | time.Format ":date_medium" }}
+                {{ .PublishDate | time.Format "2. Jan 2006" }}
               </span>
             </time>
             {{ range .Params.tags }}
