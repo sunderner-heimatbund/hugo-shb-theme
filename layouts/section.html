@@ -34,7 +34,7 @@
       {{ end }}
       {{ $authorImageURL := printf "/%s" (replaceRE "^/" "" $authorImagePath) }}
       {{ with resources.Get $authorImagePath }}
-        {{ $authorImageURL = .RelPermalink }}
+        {{ $authorImageURL = (.Fill "128x128").RelPermalink }}
       {{ end }}
 
       {{/* single article card */}}
