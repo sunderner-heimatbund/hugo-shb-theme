@@ -1,7 +1,32 @@
 {{ define "main" }}
-<h1>{{ .Title }}</h1>
-{{ .Content }}
-{{ range .Pages }}
-<h2><a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a></h2>
-{{ end }}
+<div class="py-16 sm:py-20">
+  <div class="mx-auto max-w-2xl px-6 lg:px-8">
+
+    <h2 class="text-4xl font-semibold tracking-tight text-pretty sm:text-5xl">{{ .Title }}</h2>
+    <p class="mt-2 text-muted-foreground">
+      {{ $n := len .Pages }}
+      {{ $n }} Beitrag{{ if ne $n 1 }}e{{ end }}
+    </p>
+
+    <hr class="my-10" />
+
+    <ul>
+      {{ range .Pages.ByPublishDate.Reverse }}
+      <li>
+        <a href="{{ .RelPermalink }}"
+           class="group flex flex-col gap-1 py-5 transition-colors sm:flex-row sm:items-baseline sm:gap-x-6">
+          <time datetime='{{ .PublishDate | time.Format "2006-01-02" }}'
+                class="shrink-0 text-sm tabular-nums text-muted-foreground sm:w-32">
+            {{ .PublishDate | time.Format ":date_medium" }}
+          </time>
+          <h3 class="text-base sm:text-lg/6 font-semibold text-foreground group-hover:underline">
+            {{ .LinkTitle }}
+          </h3>
+        </a>
+      </li>
+      {{ end }}
+    </ul>
+
+  </div>
+</div>
 {{ end }}
