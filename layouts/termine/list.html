@@ -1,0 +1,67 @@
+{{ define "main" }}
+<div class="py-16 sm:py-20">
+  <div class="mx-auto max-w-3xl px-6 lg:px-8">
+
+    <h2 class="text-3xl font-semibold tracking-tight text-pretty sm:text-5xl">{{ .Title }}</h2>
+    <p class="mt-2 text-lg/8 text-muted-foreground">{{ .Content | plainify }}</p>
+
+    <hr class="my-10" />
+
+    {{/* collect all events from posts */}}
+    {{ $events := slice }}
+    {{ range where site.RegularPages "Type" "posts" }}
+      {{ $post := . }}
+      {{ with .Params.events }}
+        {{ range . }}
+          {{ $ev := . }}
+          {{ with $ev.date }}
+            {{ $event := dict
+              "date" (time.AsTime .)
+              "title" (or $ev.title $post.Title)
+              "summary" (or $ev.summary ($post.Summary | plainify | truncate 250))
+              "link" $post.RelPermalink
+            }}
+            {{ $events = $events | append $event }}
+          {{ end }}
+        {{ end }}
+      {{ end }}
+    {{ end }}
+
+    {{ $events = sort $events "date" "asc" }}
+    {{ $now := now }}
+    {{ $upcoming := where $events "date" "ge" $now }}
+    {{ $past := where $events "date" "lt" $now }}
+
+    {{ if gt (len $events) 0 }}
+
+      {{ if gt (len $upcoming) 0 }}
+        <h3 class="text-xl font-semibold sm:text-2xl">Kommende Termine</h3>
+        <div class="mt-6 space-y-4">
+          {{ range $event := $upcoming }}
+            {{ partial "event-card.html" (dict "event" $event "dimmed" false) }}
+          {{ end }}
+        </div>
+      {{ else }}
+        <p class="text-muted-foreground">Derzeit sind keine kommenden Termine bekannt.</p>
+      {{ end }}
+
+      {{ if gt (len $past) 0 }}
+        <details class="mt-6">
+          <summary class="cursor-pointer select-none text-sm font-medium text-muted-foreground hover:text-foreground hover:underline">
+            Vergangene Termine anzeigen
+          </summary>
+          <div class="mt-4 space-y-4">
+            {{ range $event := $past }}
+              {{ partial "event-card.html" (dict "event" $event "dimmed" true) }}
+            {{ end }}
+          </div>
+        </details>
+      {{ end }}
+
+    {{ else }}
+      <p class="text-muted-foreground">Derzeit sind keine Termine bekannt.</p>
+    {{ end }}
+
+  </div>
+</div>
+{{ end }}

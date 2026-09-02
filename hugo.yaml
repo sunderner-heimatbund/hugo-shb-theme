@@ -10,6 +10,9 @@ menus:
     - name: Beiträge
       pageRef: /posts
       weight: 20
+    - name: Termine
+      pageRef: /termine
+      weight: 25
     - name: Über
       pageRef: /about
       weight: 30

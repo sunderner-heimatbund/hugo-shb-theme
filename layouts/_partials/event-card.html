@@ -1,0 +1,13 @@
+{{ $event := .event }}
+{{ $dimmed := .dimmed }}
+<a href="{{ $event.link }}"
+   class="group flex flex-col gap-1 rounded-2xl bg-(--color-card) p-5 transition sm:rounded-3xl sm:p-6 {{ if $dimmed }}opacity-50 hover:opacity-75{{ else }}hover:bg-(--color-card-hover){{ end }}">
+  <time datetime='{{ $event.date | time.Format "2006-01-02" }}'
+        class="text-sm font-semibold text-muted-foreground">
+    {{ $event.date | time.Format "2. Jan 2006" }}
+  </time>
+  <h4 class="mt-1 text-lg/6 font-semibold group-hover:underline">{{ $event.title }}</h4>
+  {{ with $event.summary }}
+    <p class="mt-2 text-sm/6 text-muted-foreground line-clamp-3">{{ . }}</p>
+  {{ end }}
+</a>
